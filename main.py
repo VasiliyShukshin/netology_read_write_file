@@ -8,10 +8,11 @@ with open("cookbook.txt", "r", encoding="UTF-8") as cook_book_file:
             super_ingrediet_listt = []
             while i < number_of_ingredients:
                 ingredients_list = cook_book_file.readline().strip().split(" | ")
-                ingredients_dict = {'ingredient_name': ingredients_list[0], 'quantity': ingredients_list[1], 'measure':ingredients_list[2]}
+                ingredients_dict = {'ingredient_name': ingredients_list[0], 'quantity': int(ingredients_list[1]),
+                                    'measure': ingredients_list[2]}
                 super_ingrediet_listt.append(ingredients_dict)
                 cook_book[name] = super_ingrediet_listt
-                i +=  1
+                i += 1
             next(cook_book_file)
     except StopIteration:
         None
@@ -29,16 +30,19 @@ def get_shop_list_by_dishes(dishes, person_count=int()):
             for product in cook_book[dish]:
                 # если продукт уже есть в списке
                 if product['ingredient_name'] in shop_dict:
-                    shop_dict[product['ingredient_name']] = {'measure': product['measure'],
-                                                             'quantity': (int(product['quantity']) + int(product['quantity']))*person_count}
+                    shop_dict[product['ingredient_name']]['quantity'] += product['quantity']
+                    # print(shop_dict[product['ingredient_name']]['quantity'])
+                    # print(product['quantity'])
                 else:
                     shop_dict[product['ingredient_name']] = {'measure': product['measure'],
-                                                             'quantity': int(product['quantity'])*person_count}
-            # print(shop_dict)
+                                                             'quantity': int(product['quantity'])}
         else:
             print(f"{dish} - такого  блюда нет в cook_book")
-        # # print(shop_dict)
-
+    for key, val in shop_dict.items():
+        val['quantity'] = val['quantity'] * person_count
+        # print(key, val)
+        # print(shop_dict)
     return print(shop_dict)
 
-get_shop_list_by_dishes(['Омлет', 'яичница'], 1)
+
+get_shop_list_by_dishes(['Омлет', 'Омлет', 'Яичница'], 2)
